@@ -127,7 +127,7 @@ public class Eraser {
     }
 
     public void iniciarConexao() {
-        conn = getConexaoVAL();
+        conn = getConexaoTI();
     }
 
     private void apagarPessoa(Long cpf, Connection conn) {

@@ -23,15 +23,16 @@ public class Eraser {
 
     protected void apagarEmLote() {
         Long[] vet = new Long[] {
-            80217184804L,
-            9689494287L,
-            11879343800L,
-            60113340753L,
-            15179370868L,
-            32664788787L,
-            251186415L,
-            49263447853L,
-            7287186268L
+            7435223115L,
+            682705934L,
+            4280024120L,
+            27568067149L,
+            6008895053L,
+            55065570787L,
+            9596062549L,
+            438456149L,
+            352365668L,
+            15992110763L
         };
 
         iniciarConexao();
@@ -127,7 +128,7 @@ public class Eraser {
     }
 
     public void iniciarConexao() {
-        conn = getConexaoTI();
+        conn = getConexaoDES();
     }
 
     private void apagarPessoa(Long cpf, Connection conn) {
@@ -148,6 +149,10 @@ public class Eraser {
 
         execScript(conn, "DELETE FROM PESSOA.LOG_ALTERACAO_PESSOA WHERE ID_PESSOA = " + idPessoa.toString());
 
+        execScript(conn, 
+            "DELETE FROM PESSOA.DOCUMENTO_METADADO WHERE ID_PESSOA_DOCUMENTO IN (SELECT ID_PESSOA_DOCUMENTO FROM PESSOA.PESSOA_DOCUMENTO WHERE ID_PESSOA = " 
+                + idPessoa + ")");
+        
         execScript(conn, "DELETE FROM PESSOA.PESSOA_DOCUMENTO WHERE ID_PESSOA = " + idPessoa);
 
         List<Long> idsVersoes = buscarIdVersoes(idsHistorico);
@@ -231,6 +236,9 @@ public class Eraser {
 
         // TIPO_PESSOA
         execScript(conn, "DELETE FROM PESSOA.HIST_TIPO_PESSOA WHERE ID_PESSOA = " + idPessoa.toString());
+        
+        // PESSOA_INCONSISTENCIA
+        execScript(conn, "DELETE FROM PESSOA.PESSOA_INCONSISTENCIA WHERE ID_PESSOA = " + idPessoa.toString());
 
         // PESSOA
         execScript(conn, "DELETE FROM PESSOA.PESSOA WHERE ID_PESSOA = " + idPessoa.toString());
